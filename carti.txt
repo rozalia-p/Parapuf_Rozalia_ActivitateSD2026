@@ -1,0 +1,5 @@
+1,328,George Orwell,45.50,D
+2,672,Fiodor Dostoievski,52.00,C
+3,464,Yuval Noah Harari,65.99,I
+4,96,Antoine de Saint-Exupery,25.00,F
+5,496,Andy Weir,58.30,S
