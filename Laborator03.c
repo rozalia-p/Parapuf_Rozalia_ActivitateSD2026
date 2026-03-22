@@ -123,6 +123,8 @@ int main() {
 	afisareVectorCarti(carti, nrCarti);
 
 	dezalocareVectorCarti(&carti, &nrCarti);
+	printf("--- Vectorul de Carti dupa dezalocare ---\n\n");
+	afisareVectorCarti(carti, nrCarti);
 
 	return 0;
 }
