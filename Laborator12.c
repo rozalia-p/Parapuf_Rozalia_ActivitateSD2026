@@ -274,6 +274,27 @@ void afisareGrafInLatime(NodPrincipal* graf, int idPlecare) {
 	}
 	free(vizitate);
 }
+int determinaNumarConexiuniCarte(NodPrincipal* graf, int idCarte) {
+
+	NodPrincipal* nodGasit = cautaNodDupaID(graf, idCarte);
+
+	if (nodGasit == NULL) {
+		printf("Cartea cu ID %d nu exista in graf.\n", idCarte);
+		return 0;
+	}
+
+	int numarLegaturi = 0;
+	
+	NodSecundar* p = nodGasit->vecini;
+
+	
+	while (p != NULL) {
+		numarLegaturi++;
+		p = p->next;
+	}
+
+	return numarLegaturi;
+}
 
 
 int main() {
@@ -291,6 +312,10 @@ int main() {
 	printf("-> Merge pe firul recomandarilor pana la capat inainte de a se intoarce.\n");
 	afisareGrafInAdancime(graf, 1);
 
+	int idCautat = 1;
+	int nrConexiuni = determinaNumarConexiuniCarte(graf, idCautat);
+
+	printf("\nCartea cu ID %d are %d recomandari asociate.\n", idCautat, nrConexiuni);
 	
 	dezalocareNoduriGraf(&graf);
 
