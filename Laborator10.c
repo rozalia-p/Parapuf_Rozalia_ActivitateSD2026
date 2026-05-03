@@ -218,6 +218,33 @@ float calculeazaPretTotalStiva(Nod** varfStiva) {
 	return sumaTotala;
 }
 
+Coada extrageCartiDupaCategorie(Coada* coadaOriginala, char categorieCautata) {
+	
+	Coada coadaFiltrata;
+	coadaFiltrata.fata = NULL;
+	coadaFiltrata.spate = NULL;
+
+	
+	Coada coadaAuxiliara;
+	coadaAuxiliara.fata = NULL;
+	coadaAuxiliara.spate = NULL;
+
+	while (!emptyQueue(*coadaOriginala)) {
+		Carte extrasa = dequeue(coadaOriginala);
+		if (extrasa.categorie == categorieCautata) {
+			enqueue(&coadaFiltrata, extrasa); 
+		}
+		else {
+			enqueue(&coadaAuxiliara, extrasa); 
+		}
+	}
+	while (!emptyQueue(coadaAuxiliara)) {
+		enqueue(coadaOriginala, dequeue(&coadaAuxiliara));
+	}
+
+	return coadaFiltrata;
+}
+
 int main() {
 
 	printf("--- STIVA (LIFO) ---\n");
@@ -249,7 +276,22 @@ int main() {
 	printf("--- COADA (FIFO) ---\n");
 	Coada coadaCarti = citireCoadaDeCartiDinFisier("carti.txt");
 
-	printf("Extragem (Dequeue) cartile din coada (Ies in exact aceeasi ordine in care au fost in fisier):\n");
+
+	
+	char catCautata = 'D';
+	printf("Extragem toate cartile din categoria '%c' intr-o coada separata...\n", catCautata);
+
+	Coada coadaCategorieD = extrageCartiDupaCategorie(&coadaCarti, catCautata);
+
+
+	printf("\n--- Coada Noua (Doar cartile din categoria %c) ---\n", catCautata);
+	while (!emptyQueue(coadaCategorieD)) {
+		Carte extrasa = dequeue(&coadaCategorieD);
+		afisareCarte(extrasa);
+		free(extrasa.autor); 
+	}
+
+	printf("\n--- Coada Originala (Ce a mai ramas in biblioteca) ---\n");
 	while (!emptyQueue(coadaCarti)) {
 		Carte extrasa = dequeue(&coadaCarti);
 		afisareCarte(extrasa);
