@@ -296,6 +296,39 @@ int determinaNumarConexiuniCarte(NodPrincipal* graf, int idCarte) {
 	return numarLegaturi;
 }
 
+Carte ceaMaiScumpaRecomandare(NodPrincipal* graf, int idCarteCautata) {
+	Carte carteEroare;
+	carteEroare.id = -1;
+	carteEroare.autor = NULL;
+
+	NodPrincipal* nodSursa = cautaNodDupaID(graf, idCarteCautata);
+
+
+	if (nodSursa == NULL || nodSursa->vecini == NULL) {
+		return carteEroare;
+	}
+
+	float maxPret = -1.0f;
+	Carte carteMax = carteEroare;
+
+
+	NodSecundar* tempVecin = nodSursa->vecini;
+
+	while (tempVecin != NULL) {
+		
+		float pretCurent = tempVecin->nodInfo->info.pret;
+
+		if (pretCurent > maxPret) {
+			maxPret = pretCurent;
+			carteMax = tempVecin->nodInfo->info; 
+		}
+
+		tempVecin = tempVecin->next;
+	}
+
+	return carteMax;
+}
+
 
 int main() {
 	
@@ -316,6 +349,18 @@ int main() {
 	int nrConexiuni = determinaNumarConexiuniCarte(graf, idCautat);
 
 	printf("\nCartea cu ID %d are %d recomandari asociate.\n", idCautat, nrConexiuni);
+
+	int idSursa = 1;
+	printf("\n--- Cautare Recomandare Premium ---\n");
+	Carte recomandareScumpa = ceaMaiScumpaRecomandare(graf, idSursa);
+
+	if (recomandareScumpa.id != -1) {
+		printf("Cea mai scumpa carte recomandata daca citesti cartea cu ID %d este:\n", idSursa);
+		afisareCarte(recomandareScumpa);
+	}
+	else {
+		printf("Cartea cu ID %d nu a fost gasita sau nu are nicio recomandare asociata.\n", idSursa);
+	}
 	
 	dezalocareNoduriGraf(&graf);
 
