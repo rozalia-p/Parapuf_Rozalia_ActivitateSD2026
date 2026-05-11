@@ -228,8 +228,44 @@ float calculeazaPretulCartilorUnuiAutor(Nod* radacina, const char* autor) {
 	return 0;
 }
 
-int main() {
 
+
+Carte cautaCarteDupaID(Nod* radacina, int idCautat) {
+	if (radacina == NULL) {
+		Carte eroare;
+		eroare.id = -1;
+		eroare.autor = NULL;
+		return eroare;
+	}
+
+	if (radacina->info.id == idCautat) {
+		return radacina->info;
+	}
+	else if (idCautat < radacina->info.id) {
+		return cautaCarteDupaID(radacina->st, idCautat);
+	}
+	else {
+		return cautaCarteDupaID(radacina->dr, idCautat);
+	}
+}
+
+
+float calculeazaPretTotalAutor(Nod* radacina, const char* autorCautat) {
+	if (radacina == NULL) {
+		return 0;
+	}
+
+	float pretCurent = 0;
+	if (strcmp(radacina->info.autor, autorCautat) == 0) {
+		pretCurent = radacina->info.pret;
+	}
+
+	return pretCurent +
+		calculeazaPretTotalAutor(radacina->st, autorCautat) +
+		calculeazaPretTotalAutor(radacina->dr, autorCautat);
+}
+
+int main() {
 	Nod* radacina = citireArboreDeCartiDinFisier("carti.txt");
 
 	printf("--- Parcurgere INORDINE (Sortat dupa ID) ---\n");
@@ -252,7 +288,26 @@ int main() {
 	}
 	else {
 		printf("Cartea cu ID-ul cerut nu a fost gasita.\n");
+	} 
+
+	printf("\n--- Testare Cautare Rapida ---\n");
+	int idDeCautat = 3;
+	Carte gasitaRapid = cautaCarteDupaID(radacina, idDeCautat); 
+
+	if (gasitaRapid.id != -1) {
+		
+		printf("Cartea cu ID %d a fost gasita: Autor: %s, Pret: %.2f RON\n",
+			gasitaRapid.id, gasitaRapid.autor, gasitaRapid.pret);
 	}
+	else {
+		printf("Cartea cu ID %d nu exista in biblioteca.\n", idDeCautat);
+	}
+
+	printf("\n--- Testare Procesare Recursiva ---\n");
+	const char* autorTest = "George Orwell";
+	float totalPret = calculeazaPretTotalAutor(radacina, autorTest);
+	printf("Valoarea totala a cartilor scrise de %s este: %.2f RON\n", autorTest, totalPret);
+
 
 	dezalocareArboreDeCarti(&radacina);
 	return 0;
