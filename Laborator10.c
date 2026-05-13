@@ -244,6 +244,35 @@ Coada extrageCartiDupaCategorie(Coada* coadaOriginala, char categorieCautata) {
 
 	return coadaFiltrata;
 }
+Carte getCeaMaiGrosaCarteDinStiva(Nod** varfStiva) {
+	Nod* stivaAuxiliara = NULL;
+	Carte carteMax;
+	carteMax.id = -1; 
+	int maxPagini = -1;
+
+	
+	while (!emptyStack(*varfStiva)) {
+		Carte extrasa = popStack(varfStiva);
+
+		
+		if (extrasa.nrPagini > maxPagini) {
+			maxPagini = extrasa.nrPagini;
+			carteMax = extrasa;
+		}
+
+		
+		pushStack(&stivaAuxiliara, extrasa);
+	}
+
+	
+	while (!emptyStack(stivaAuxiliara)) {
+		pushStack(varfStiva, popStack(&stivaAuxiliara));
+	}
+
+	return carteMax;
+}
+
+
 
 int main() {
 
@@ -261,6 +290,18 @@ int main() {
 	}
 	else {
 		printf("Cartea cu ID %d nu a fost gasita!\n", idDeCautat);
+	}
+
+	printf("\nCautam cea mai voluminoasa carte din stiva:\n");
+	Carte carteGroasa = getCeaMaiGrosaCarteDinStiva(&stivaCarti);
+
+	if (carteGroasa.id != -1) {
+		printf("Cea mai groasa carte este: '%s' scrisa de %s, avand %d pagini.\n",
+			carteGroasa.autor, carteGroasa.autor, carteGroasa.nrPagini);
+		
+	}
+	else {
+		printf("Stiva de carti este goala!\n");
 	}
 
 	printf("\nExtragem (Pop) cartile ramase in stiva (Ies in ordine inversa fata de cum au intrat):\n");
