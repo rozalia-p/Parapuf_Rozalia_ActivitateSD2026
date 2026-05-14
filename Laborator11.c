@@ -204,6 +204,35 @@ void dezalocareNoduriGraf(NodPrincipal** graf) {
 	}
 }
 
+
+
+int numaraRecomandariDinCategorie(NodPrincipal* graf, int idCarteCautata, char categorieCautata) {
+	
+	NodPrincipal* nodSursa = cautaNodDupaID(graf, idCarteCautata);
+
+
+	if (nodSursa == NULL) {
+		printf("Eroare: Cartea cu ID %d nu exista in retea.\n", idCarteCautata);
+		return 0;
+	}
+
+	int contor = 0;
+
+	
+	NodSecundar* tempVecin = nodSursa->vecini;
+
+	while (tempVecin != NULL) {
+		
+		if (tempVecin->nodInfo->info.categorie == categorieCautata) {
+			contor++;
+		}
+
+		tempVecin = tempVecin->next;
+	}
+
+	return contor;
+}
+
 int main() {
 	
 
@@ -215,6 +244,15 @@ int main() {
 	
 	printf("=== RETEA DE CARTI (GRAF) ===\n");
 	afisareGraf(graf);
+
+	printf("\n--- Analiza Recomandarilor ---\n");
+	int idTest = 1;         
+	char catTest = 'F';     
+
+	int nrRecomandari = numaraRecomandariDinCategorie(graf, idTest, catTest);
+
+	printf("Cartea cu ID %d are %d recomandari din categoria '%c'.\n",
+		idTest, nrRecomandari, catTest);
 
 	dezalocareNoduriGraf(&graf);
 
